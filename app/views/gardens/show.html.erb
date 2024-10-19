@@ -1,0 +1,36 @@
+<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= @garden.image_url %>);">
+  <div class="container">
+    <h1><%= @garden.name %></h1>
+  </div>
+</div>
+<div class="container">
+  <div class="cards my-5">
+    <% @garden.plants.each do |plant| %>
+      <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= plant.image_url %>)">
+        <%= link_to plant_path(plant), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: 'remove' do %>
+          <i class="fa-solid fa-trash-can"></i>
+        <% end %>
+        <%= plant.name %>
+        <div class='chores'>
+          <% if plant.chores.any? %>
+            Last Chore: <%= plant.completions.order(:created_at).last.chore.name %>
+          <% end %>
+          <%= link_to new_plant_completion_path(plant), class: 'ms-2' do %>
+            <i class="fa-solid fa-list-check"></i>
+            Add
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-4">
+      <h1>Add new plant</h1>
+      <%= simple_form_for [@garden, @plant] do |f| %>
+        <%= f.input :name %>
+        <%= f.input :image_url %>
+        <%= f.submit "Add Plant", class: 'btn btn-primary' %>
+      <% end %>
+    </div>
+  </div>
+</div>
